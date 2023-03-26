@@ -1,0 +1,55 @@
+dependencies {
+    implementation(project(":${rootProject.name}-domain"))
+    implementation(project(":${rootProject.name}-dao")) {
+        exclude module: "hibernate-jpa-2.1-api" ///TODO ????
+        exclude module: "spring-tx" ///TODO ????
+    }
+    implementation(project(":${rootProject.name}-service"))
+    implementation(project(":${rootProject.name}-infrastructure"))
+    implementation(project(":${rootProject.name}-integration"))
+
+    testImplementation(project(":${rootProject.name}-test-starter"))
+    testImplementation(project(":${rootProject.name}-infrastructure"))
+    testImplementation(project(":${rootProject.name}-integration-impl"))
+
+    implementation "com.bw.commons:bw-string-extractor:$bwcommonsVersion"
+    implementation "com.bw.commons:bw-security:$bwcommonsVersion"
+    implementation "com.bw.commons:bw-starter:$bwcommonsVersion"
+    implementation "com.bw.commons:bw-api-client:$bwcommonsVersion"
+    implementation "com.bw.commons:bw-auth-client:$bwcommonsVersion"
+
+    implementation group: 'com.querydsl', name: 'querydsl-core', version: "$queryDslVersion"
+    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "$queryDslVersion"
+    compileOnly "javax.servlet:javax.servlet-api:$servletVersion"
+    implementation group: 'org.springframework', name: 'spring-webmvc', version: "$springVersion"
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "$springDataVersion"
+    implementation group: 'commons-io', name: 'commons-io', version: "$commonsioVersion"
+    implementation "org.apache.poi:poi-ooxml:4.0.0"
+    implementation "javax.validation:validation-api:$validationApiVersion"
+    implementation("javax.inject:javax.inject:$javaxInjectVersion")
+
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: "$sprinfdocOpenApiUIVersion"
+    implementation group: 'com.google.api-client', name: 'google-api-client', version: "$googleApiClientVersion"
+    implementation "org.springframework.social:spring-social-facebook:$springSocialFacebookVersion"
+
+    testImplementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            element = 'CLASS'
+            limit {
+                minimum = 0.95
+            }
+            excludes = [
+                    'com.bw.exception.*',
+                    'com.bw.excel.*',
+                    'com.bw.reference.controlleradvice.*',
+                    'com.bw.reference.spec.*',
+            ]
+        }
+    }
+}
+check.dependsOn jacocoTestCoverageVerification

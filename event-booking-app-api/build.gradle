@@ -1,0 +1,90 @@
+plugins {
+    id 'org.springframework.boot' version "$springBootVersion"
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id "org.sonarqube" version "2.7"
+    id "war"
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'jacoco'
+
+    group = 'com.bw'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '1.8'
+
+    repositories {
+        mavenCentral()
+        maven {
+            name = 'localhost.localdomain-releases'
+            url = "https://artifact.byteworks.com.ng/artifactory/libs-release-local"
+        }
+        maven { url = 'https://jitpack.io' }
+    }
+    dependencies {
+        testImplementation(project(":${rootProject.name}-test-starter"))
+
+        implementation group: 'com.google.code.gson', name: 'gson', version: "$gsonVersion"
+        implementation group: 'org.apache.commons', name: 'commons-lang3', version: "$commonslangVersion"
+
+        compileOnly "org.projectlombok:lombok:$lombokVersion"
+        annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+        testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+        testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    }
+
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+
+    sourceSets {
+        test {
+            resources {
+                srcDirs = ['src/test/resources', "${project.rootDir}/data-model/test"]
+            }
+        }
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation(project(":${rootProject.name}-domain"))
+    implementation(project(":${rootProject.name}-dao"))
+    implementation(project(":${rootProject.name}-service"))
+    implementation(project(":${rootProject.name}-service-impl"))
+    implementation(project(":${rootProject.name}-integration"))
+    implementation(project(":${rootProject.name}-integration-impl"))
+    implementation(project(":${rootProject.name}-infrastructure"))
+    implementation(project(":${rootProject.name}-controller"))
+
+
+    implementation "com.bw.commons:bw-api-client:${bwcommonsVersion}"
+    implementation "com.bw.commons:bw-spring-starter:${bwcommonsVersion}"
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    //Extra
+    //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+}
