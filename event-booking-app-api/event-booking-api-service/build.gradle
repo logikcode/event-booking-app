@@ -1,0 +1,5 @@
+dependencies {
+    implementation(project(":${rootProject.name}-domain"))
+
+    implementation group: 'com.google.api-client', name: 'google-api-client', version: "$googleApiClientVersion"
+}
