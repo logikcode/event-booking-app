@@ -1,0 +1,8 @@
+dependencies {
+    implementation(project(":${rootProject.name}-domain"))
+
+    implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: "$springDataVersion"
+    implementation group: 'com.querydsl', name: 'querydsl-jpa', version: "$queryDslVersion"
+    implementation group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: "$hibernateJpaVersion"
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: "$hibernateCoreVersion"
+}
